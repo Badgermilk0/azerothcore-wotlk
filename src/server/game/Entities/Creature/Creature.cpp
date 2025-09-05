@@ -1538,7 +1538,9 @@ void Creature::SelectLevel(bool changelevel)
     CreatureBaseStats const* stats = sObjectMgr->GetCreatureBaseStats(level, cInfo->unit_class);
 
     // health
-    float healthmod = _GetHealthMod(rank);
+    // CUSTOM MODIFICATIONS
+    float healthmod = _GetHealthMod(rank, level);
+    // END CUSTOM MODIFICATIONS
 
     uint32 basehp = std::max<uint32>(1, stats->GenerateHealth(cInfo));
     uint32 health = uint32(basehp * healthmod);
@@ -1582,23 +1584,108 @@ void Creature::SelectLevel(bool changelevel)
     sScriptMgr->OnCreatureSelectLevel(cInfo, this);
 }
 
-float Creature::_GetHealthMod(int32 Rank)
+// CUSTOM MODIFICATIONS
+float Creature::_GetHealthMod(int32 Rank, uint8 level)
 {
+    float multiplier = 1.0f;
+    if (level >= 1 && level <= 4)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_1_4_HP);
+    else if (level >= 5 && level <= 9)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_5_9_HP);
+    else if (level >= 10 && level <= 14)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_10_14_HP);
+    else if (level >= 15 && level <= 19)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_15_19_HP);
+    else if (level >= 20 && level <= 24)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_20_24_HP);
+    else if (level >= 25 && level <= 29)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_25_29_HP);
+    else if (level >= 30 && level <= 34)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_30_34_HP);
+    else if (level >= 35 && level <= 39)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_35_39_HP);
+    else if (level >= 40 && level <= 44)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_40_44_HP);
+    else if (level >= 45 && level <= 49)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_45_49_HP);
+    else if (level >= 50 && level <= 54)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_50_54_HP);
+    else if (level >= 55 && level <= 59)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_55_59_HP);
+    else if (level == 60)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_60_HP);
+    else if (level >= 61 && level <= 64)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_61_64_HP);
+    else if (level >= 65 && level <= 69)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_65_69_HP);
+    else if (level == 70)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_70_HP);
+    else if (level >= 71 && level <= 74)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_71_74_HP);
+    else if (level >= 75 && level <= 79)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_75_79_HP);
+    else if (level >= 80 && level <= 90)
+        multiplier = sWorld->getRate(RATE_CREATURE_LEVEL_80_90_HP);
+
     switch (Rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
-            return sWorld->getRate(RATE_CREATURE_NORMAL_HP);
+            return sWorld->getRate(RATE_CREATURE_NORMAL_HP) * multiplier;
         case CREATURE_ELITE_ELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_HP);
+            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_HP) * multiplier;
         case CREATURE_ELITE_RAREELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_HP);
+            return sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_HP) * multiplier;
         case CREATURE_ELITE_WORLDBOSS:
-            return sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_HP);
+            return sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_HP) * multiplier;
         case CREATURE_ELITE_RARE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RARE_HP);
+            return sWorld->getRate(RATE_CREATURE_ELITE_RARE_HP) * multiplier;
         default:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_HP);
+            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_HP) * multiplier;
     }
+}
+
+float Creature::_GetDamageModForLevel(uint8 level)
+{
+    if (level >= 1 && level <= 4)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_1_4_DAMAGE);
+    else if (level >= 5 && level <= 9)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_5_9_DAMAGE);
+    else if (level >= 10 && level <= 14)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_10_14_DAMAGE);
+    else if (level >= 15 && level <= 19)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_15_19_DAMAGE);
+    else if (level >= 20 && level <= 24)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_20_24_DAMAGE);
+    else if (level >= 25 && level <= 29)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_25_29_DAMAGE);
+    else if (level >= 30 && level <= 34)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_30_34_DAMAGE);
+    else if (level >= 35 && level <= 39)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_35_39_DAMAGE);
+    else if (level >= 40 && level <= 44)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_40_44_DAMAGE);
+    else if (level >= 45 && level <= 49)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_45_49_DAMAGE);
+    else if (level >= 50 && level <= 54)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_50_54_DAMAGE);
+    else if (level >= 55 && level <= 59)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_55_59_DAMAGE);
+    else if (level == 60)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_60_DAMAGE);
+    else if (level >= 61 && level <= 64)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_61_64_DAMAGE);
+    else if (level >= 65 && level <= 69)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_65_69_DAMAGE);
+    else if (level == 70)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_70_DAMAGE);
+    else if (level >= 71 && level <= 74)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_71_74_DAMAGE);
+    else if (level >= 75 && level <= 79)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_75_79_DAMAGE);
+    else if (level >= 80) // Covers 80-90 as specified in the enum
+        return sWorld->getRate(RATE_CREATURE_LEVEL_80_90_DAMAGE);
+
+    return 1.0f; // Default fallback
 }
 
 float Creature::_GetDamageMod(int32 Rank)
@@ -1620,24 +1707,78 @@ float Creature::_GetDamageMod(int32 Rank)
     }
 }
 
+float Creature::_GetSpellDamageModForLevel(uint8 level)
+{
+    if (level >= 1 && level <= 4)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_1_4_SPELLDAMAGE);
+    else if (level >= 5 && level <= 9)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_5_9_SPELLDAMAGE);
+    else if (level >= 10 && level <= 14)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_10_14_SPELLDAMAGE);
+    else if (level >= 15 && level <= 19)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_15_19_SPELLDAMAGE);
+    else if (level >= 20 && level <= 24)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_20_24_SPELLDAMAGE);
+    else if (level >= 25 && level <= 29)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_25_29_SPELLDAMAGE);
+    else if (level >= 30 && level <= 34)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_30_34_SPELLDAMAGE);
+    else if (level >= 35 && level <= 39)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_35_39_SPELLDAMAGE);
+    else if (level >= 40 && level <= 44)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_40_44_SPELLDAMAGE);
+    else if (level >= 45 && level <= 49)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_45_49_SPELLDAMAGE);
+    else if (level >= 50 && level <= 54)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_50_54_SPELLDAMAGE);
+    else if (level >= 55 && level <= 59)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_55_59_SPELLDAMAGE);
+    else if (level == 60)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_60_SPELLDAMAGE);
+    else if (level >= 61 && level <= 64)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_61_64_SPELLDAMAGE);
+    else if (level >= 65 && level <= 69)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_65_69_SPELLDAMAGE);
+    else if (level == 70)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_70_SPELLDAMAGE);
+    else if (level >= 71 && level <= 74)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_71_74_SPELLDAMAGE);
+    else if (level >= 75 && level <= 79)
+        return sWorld->getRate(RATE_CREATURE_LEVEL_75_79_SPELLDAMAGE);
+    else if (level >= 80) // Covers 80-90 as specified in the enum
+        return sWorld->getRate(RATE_CREATURE_LEVEL_80_90_SPELLDAMAGE);
+
+    return 1.0f; // Default fallback
+}
+
 float Creature::GetSpellDamageMod(int32 Rank)
 {
+    float rankMod;
     switch (Rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
-            return sWorld->getRate(RATE_CREATURE_NORMAL_SPELLDAMAGE);
+            rankMod = sWorld->getRate(RATE_CREATURE_NORMAL_SPELLDAMAGE);
+            break;
         case CREATURE_ELITE_ELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
+            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
+            break;
         case CREATURE_ELITE_RAREELITE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_SPELLDAMAGE);
+            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_SPELLDAMAGE);
+            break;
         case CREATURE_ELITE_WORLDBOSS:
-            return sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_SPELLDAMAGE);
+            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_SPELLDAMAGE);
+            break;
         case CREATURE_ELITE_RARE:
-            return sWorld->getRate(RATE_CREATURE_ELITE_RARE_SPELLDAMAGE);
+            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_RARE_SPELLDAMAGE);
+            break;
         default:
-            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
+            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
+            break;
     }
+
+    return rankMod * _GetSpellDamageModForLevel(GetLevel());
 }
+// END CUSTOM MODIFICATIONS
 
 bool Creature::CreateFromProto(ObjectGuid::LowType guidlow, uint32 Entry, uint32 vehId, const CreatureData* data)
 {
@@ -1779,7 +1920,9 @@ bool Creature::LoadCreatureFromDB(ObjectGuid::LowType spawnId, Map* map, bool ad
         curhealth = data->curhealth;
         if (curhealth)
         {
-            curhealth = uint32(curhealth * _GetHealthMod(GetCreatureTemplate()->rank));
+            //CUSTOM MODIFICATIONS
+            curhealth = uint32(curhealth * _GetHealthMod(GetCreatureTemplate()->rank, GetLevel()));
+            //END CUSTOM MODIFICATIONS
             if (curhealth < 1)
                 curhealth = 1;
         }

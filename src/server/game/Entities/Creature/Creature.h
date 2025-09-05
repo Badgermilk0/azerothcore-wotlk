@@ -443,7 +443,11 @@ protected:
     // vendor items
     VendorItemCounts m_vendorItemCounts;
 
-    static float _GetHealthMod(int32 Rank);
+    //CUSTOM MODIFICATIONS
+    static float _GetHealthMod(int32 Rank, uint8 level);
+    static float _GetDamageModForLevel(uint8 level);
+    static float _GetSpellDamageModForLevel(uint8 level);
+    //END CUSTOM MODIFICATIONS
 
     ObjectGuid m_lootRecipient;
     ObjectGuid::LowType m_lootRecipientGroup;

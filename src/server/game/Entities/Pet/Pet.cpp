@@ -1107,7 +1107,9 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
         // the Elite rank which is set as the default in Creature::_GetHealthMod(int32 Rank)
         if (sWorld->getBoolConfig(CONFIG_ALLOWS_RANK_MOD_FOR_PET_HEALTH))
         {
-            factorHealth *= _GetHealthMod(cinfo->rank);
+            //CUSTOM MODIFICATIONS
+            factorHealth *= _GetHealthMod(cinfo->rank, petlevel);
+            //END CUSTOM MODIFICATIONS
         }
 
         SetCreateHealth(pInfo->health*factorHealth);
@@ -1134,7 +1136,9 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
 
         if (sWorld->getBoolConfig(CONFIG_ALLOWS_RANK_MOD_FOR_PET_HEALTH))
         {
-            factorHealth *= _GetHealthMod(cinfo->rank);
+            //CUSTOM MODIFICATIONS
+            factorHealth *= _GetHealthMod(cinfo->rank, petlevel);
+            //END CUSTOM_MODIFICATIONS
         }
 
         SetCreateHealth(std::max<uint32>(1, stats->BaseHealth[cinfo->expansion]*factorHealth));

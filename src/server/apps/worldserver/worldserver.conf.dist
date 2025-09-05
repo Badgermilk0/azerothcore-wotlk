@@ -2941,6 +2941,33 @@ Rate.Creature.Elite.RARE.Damage      = 1
 Rate.Creature.Elite.RAREELITE.Damage = 1
 Rate.Creature.Elite.WORLDBOSS.Damage = 1
 
+# CUSTOM MODIFICATIONS
+#    Rate.Creature.Level.XX-XX.Damage
+#        Description: Multiplier for creature melee damage based on level ranges.
+#        Default:     1
+#
+
+Rate.Creature.Level.1-4.Damage   = 1
+Rate.Creature.Level.5-9.Damage   = 1
+Rate.Creature.Level.10-14.Damage = 1
+Rate.Creature.Level.15-19.Damage = 1
+Rate.Creature.Level.20-24.Damage = 1
+Rate.Creature.Level.25-29.Damage = 1
+Rate.Creature.Level.30-34.Damage = 1
+Rate.Creature.Level.35-39.Damage = 1
+Rate.Creature.Level.40-44.Damage = 1
+Rate.Creature.Level.45-49.Damage = 1
+Rate.Creature.Level.50-54.Damage = 1
+Rate.Creature.Level.55-59.Damage = 1
+Rate.Creature.Level.60.Damage    = 1
+Rate.Creature.Level.61-64.Damage = 1
+Rate.Creature.Level.65-69.Damage = 1
+Rate.Creature.Level.70.Damage    = 1
+Rate.Creature.Level.71-74.Damage = 1
+Rate.Creature.Level.75-79.Damage = 1
+Rate.Creature.Level.80-90.Damage = 1
+# CUSTOM MODIFICATIONS END
+
 #
 #    Rate.Creature.Normal.SpellDamage
 #    Rate.Creature.Elite.Elite.SpellDamage
@@ -2960,7 +2987,33 @@ Rate.Creature.Elite.RARE.SpellDamage      = 1
 Rate.Creature.Elite.RAREELITE.SpellDamage = 1
 Rate.Creature.Elite.WORLDBOSS.SpellDamage = 1
 
-#
+# CUSTOM MODIFICATIONS
+#    Rate.Creature.Level.XX-XX.SpellDamage
+#        Description: Multiplier for creature melee damage based on level ranges.
+#        Default:     1
+
+Rate.Creature.Level.1-4.SpellDamage   = 1
+Rate.Creature.Level.5-9.SpellDamage   = 1
+Rate.Creature.Level.10-14.SpellDamage = 1
+Rate.Creature.Level.15-19.SpellDamage = 1
+Rate.Creature.Level.20-24.SpellDamage = 1
+Rate.Creature.Level.25-29.SpellDamage = 1
+Rate.Creature.Level.30-34.SpellDamage = 1
+Rate.Creature.Level.35-39.SpellDamage = 1
+Rate.Creature.Level.40-44.SpellDamage = 1
+Rate.Creature.Level.45-49.SpellDamage = 1
+Rate.Creature.Level.50-54.SpellDamage = 1
+Rate.Creature.Level.55-59.SpellDamage = 1
+Rate.Creature.Level.60.SpellDamage    = 1
+Rate.Creature.Level.61-64.SpellDamage = 1
+Rate.Creature.Level.65-69.SpellDamage = 1
+Rate.Creature.Level.70.SpellDamage    = 1
+Rate.Creature.Level.71-74.SpellDamage = 1
+Rate.Creature.Level.75-79.SpellDamage = 1
+Rate.Creature.Level.80-90.SpellDamage = 1
+# CUSTOM MODIFICATIONS END
+
+# 
 #    Rate.Creature.Normal.HP
 #    Rate.Creature.Elite.Elite.HP
 #    Rate.Creature.Elite.RARE.HP
@@ -2978,6 +3031,32 @@ Rate.Creature.Elite.Elite.HP     = 1
 Rate.Creature.Elite.RARE.HP      = 1
 Rate.Creature.Elite.RAREELITE.HP = 1
 Rate.Creature.Elite.WORLDBOSS.HP = 1
+
+# CUSTOM MODIFICATIONS
+#    Rate.Creature.Level.XX-XX.HP
+#        Description: Multiplier for creature health based on level ranges.
+#        Default:     1
+
+Rate.Creature.Level.1-4.HP   = 1
+Rate.Creature.Level.5-9.HP   = 1
+Rate.Creature.Level.10-14.HP = 1
+Rate.Creature.Level.15-19.HP = 1
+Rate.Creature.Level.20-24.HP = 1
+Rate.Creature.Level.25-29.HP = 1
+Rate.Creature.Level.30-34.HP = 1
+Rate.Creature.Level.35-39.HP = 1
+Rate.Creature.Level.40-44.HP = 1
+Rate.Creature.Level.45-49.HP = 1
+Rate.Creature.Level.50-54.HP = 1
+Rate.Creature.Level.55-59.HP = 1
+Rate.Creature.Level.60.HP    = 1
+Rate.Creature.Level.61-64.HP = 1
+Rate.Creature.Level.65-69.HP = 1
+Rate.Creature.Level.70.HP    = 1
+Rate.Creature.Level.71-74.HP = 1
+Rate.Creature.Level.75-79.HP = 1
+Rate.Creature.Level.80-90.HP = 1
+# CUSTOM MODIFICATIONS END
 
 #
 #    ListenRange.Say

@@ -1171,9 +1171,12 @@ void Creature::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, 
     float totalValue       = GetModifierValue(unitMod, TOTAL_VALUE);
     float totalPct         = addTotalPct ? GetModifierValue(unitMod, TOTAL_PCT) : 1.0f;
     float dmgMultiplier    = GetCreatureTemplate()->DamageModifier; // = DamageModifier * _GetDamageMod(rank);
+    // CUSTOM MODIFICATIONS
+    float levelDmgMultiplier = _GetDamageModForLevel(GetLevel());
 
-    minDamage = ((weaponMinDamage + baseValue) * dmgMultiplier * basePct + totalValue) * totalPct;
-    maxDamage = ((weaponMaxDamage + baseValue) * dmgMultiplier * basePct + totalValue) * totalPct;
+    minDamage = ((weaponMinDamage + baseValue) * dmgMultiplier * levelDmgMultiplier * basePct + totalValue) * totalPct;
+    maxDamage = ((weaponMaxDamage + baseValue) * dmgMultiplier * levelDmgMultiplier * basePct + totalValue) * totalPct;
+    // END CUSTOM MODIFICATIONS
 
     // pussywizard: crashfix (casting negative to uint => min > max => assertion in urand)
     if (minDamage < 0.0f || minDamage > 1000000000.0f)
