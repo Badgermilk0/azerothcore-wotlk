@@ -1516,7 +1516,7 @@ void Pet::_LoadSpellCooldowns(PreparedQueryResult result)
         if (!cooldowns.empty() && GetOwner())
         {
             BuildCooldownPacket(data, SPELL_COOLDOWN_FLAG_NONE, cooldowns);
-            GetOwner()->GetSession()->SendPacket(&data);
+            GetOwner()->SendDirectMessage(&data);
         }
     }
 }
