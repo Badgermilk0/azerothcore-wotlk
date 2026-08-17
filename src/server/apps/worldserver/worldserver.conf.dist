@@ -3112,6 +3112,11 @@ Rate.Creature.Elite.WORLDBOSS.Damage = 1
 #    Rate.Creature.Level.XX-XX.Damage
 #        Description: Multiplier for creature melee damage based on level ranges.
 #        Default:     1
+#        Note:        These are the *legacy* level-band keys. They still work, and they now also
+#                     act as the default for the per-tier keys in the CONTENT-TIER CREATURE
+#                     SCALING section further down. Prefer the per-tier keys for new tuning:
+#                     a band key applies to Vanilla, TBC and WotLK content alike, which is
+#                     exactly the overlap the tier keys exist to solve.
 #
 
 Rate.Creature.Level.1-4.Damage   = 1
@@ -3156,8 +3161,13 @@ Rate.Creature.Elite.WORLDBOSS.SpellDamage = 1
 
 # CUSTOM MODIFICATIONS
 #    Rate.Creature.Level.XX-XX.SpellDamage
-#        Description: Multiplier for creature melee damage based on level ranges.
+#        Description: Multiplier for creature spell damage based on level ranges.
 #        Default:     1
+#        Note:        These are the *legacy* level-band keys. They still work, and they now also
+#                     act as the default for the per-tier keys in the CONTENT-TIER CREATURE
+#                     SCALING section further down. Prefer the per-tier keys for new tuning:
+#                     a band key applies to Vanilla, TBC and WotLK content alike, which is
+#                     exactly the overlap the tier keys exist to solve.
 
 Rate.Creature.Level.1-4.SpellDamage   = 1
 Rate.Creature.Level.5-9.SpellDamage   = 1
@@ -3203,6 +3213,11 @@ Rate.Creature.Elite.WORLDBOSS.HP = 1
 #    Rate.Creature.Level.XX-XX.HP
 #        Description: Multiplier for creature health based on level ranges.
 #        Default:     1
+#        Note:        These are the *legacy* level-band keys. They still work, and they now also
+#                     act as the default for the per-tier keys in the CONTENT-TIER CREATURE
+#                     SCALING section further down. Prefer the per-tier keys for new tuning:
+#                     a band key applies to Vanilla, TBC and WotLK content alike, which is
+#                     exactly the overlap the tier keys exist to solve.
 
 Rate.Creature.Level.1-4.HP   = 1
 Rate.Creature.Level.5-9.HP   = 1
@@ -3223,6 +3238,864 @@ Rate.Creature.Level.70.HP    = 1
 Rate.Creature.Level.71-74.HP = 1
 Rate.Creature.Level.75-79.HP = 1
 Rate.Creature.Level.80-90.HP = 1
+# CUSTOM MODIFICATIONS END
+
+# CUSTOM MODIFICATIONS
+###################################################################################################
+# CONTENT-TIER CREATURE SCALING
+#
+#    Rate.Creature.Tier.<Vanilla|TBC|WotLK>.Level.<1..83|84Plus>.<HP|Damage|SpellDamage>
+#
+#        Description: Per-content-tier, per-level multipliers for creature health, melee damage
+#                     and spell damage. These supersede the Rate.Creature.Level.<band>.<stat>
+#                     keys above, which cannot separate expansions because they overlap in
+#                     level: a level 70 creature is either a TBC raid boss or a Northrend
+#                     levelling mob, and a level 60-63 creature is either a Vanilla raid boss
+#                     or early Outland. Tuning by level alone hits both.
+#
+#                     The tier is taken from the creature's own creature_template.exp column,
+#                     which already selects its base health/damage curve, so the two versions
+#                     of Naxxramas and Onyxia separate correctly despite sharing a map.
+#
+#        Default:     the matching Rate.Creature.Level.<band>.<stat> value above.
+#                     A key that is absent (or commented out) inherits that legacy band value,
+#                     so an existing worldserver.conf keeps its current tuning untouched.
+#                     Set a key explicitly to override it for that tier only.
+#
+#        Typical use: uncomment the whole WotLK block and leave it at 1 so Northrend is never
+#                     scaled (that is where WotLK talents and gear match the content), then
+#                     tune the Vanilla and TBC blocks freely.
+#
+#        Note:        Damage and SpellDamage are read live and respond to `.reload config`.
+#                     HP is applied when a creature spawns, so it needs a respawn or restart.
+#                     Player pets, guardians and mind-controlled units are never scaled.
+###################################################################################################
+
+#
+# Vanilla tier - creature health
+# creature_template.exp = 0  (Azeroth / classic dungeons and raids, Naxx40)
+#
+# Rate.Creature.Tier.Vanilla.Level.1.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.2.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.3.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.4.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.5.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.6.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.7.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.8.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.9.HP                = 1
+# Rate.Creature.Tier.Vanilla.Level.10.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.11.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.12.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.13.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.14.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.15.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.16.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.17.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.18.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.19.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.20.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.21.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.22.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.23.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.24.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.25.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.26.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.27.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.28.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.29.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.30.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.31.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.32.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.33.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.34.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.35.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.36.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.37.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.38.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.39.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.40.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.41.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.42.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.43.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.44.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.45.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.46.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.47.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.48.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.49.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.50.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.51.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.52.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.53.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.54.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.55.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.56.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.57.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.58.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.59.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.60.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.61.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.62.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.63.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.64.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.65.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.66.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.67.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.68.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.69.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.70.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.71.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.72.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.73.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.74.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.75.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.76.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.77.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.78.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.79.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.80.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.81.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.82.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.83.HP               = 1
+# Rate.Creature.Tier.Vanilla.Level.84Plus.HP           = 1
+
+#
+# Vanilla tier - creature melee damage
+# creature_template.exp = 0  (Azeroth / classic dungeons and raids, Naxx40)
+#
+# Rate.Creature.Tier.Vanilla.Level.1.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.2.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.3.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.4.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.5.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.6.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.7.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.8.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.9.Damage            = 1
+# Rate.Creature.Tier.Vanilla.Level.10.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.11.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.12.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.13.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.14.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.15.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.16.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.17.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.18.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.19.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.20.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.21.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.22.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.23.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.24.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.25.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.26.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.27.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.28.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.29.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.30.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.31.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.32.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.33.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.34.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.35.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.36.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.37.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.38.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.39.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.40.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.41.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.42.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.43.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.44.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.45.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.46.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.47.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.48.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.49.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.50.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.51.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.52.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.53.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.54.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.55.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.56.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.57.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.58.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.59.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.60.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.61.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.62.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.63.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.64.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.65.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.66.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.67.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.68.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.69.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.70.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.71.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.72.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.73.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.74.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.75.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.76.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.77.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.78.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.79.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.80.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.81.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.82.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.83.Damage           = 1
+# Rate.Creature.Tier.Vanilla.Level.84Plus.Damage       = 1
+
+#
+# Vanilla tier - creature spell damage
+# creature_template.exp = 0  (Azeroth / classic dungeons and raids, Naxx40)
+#
+# Rate.Creature.Tier.Vanilla.Level.1.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.2.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.3.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.4.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.5.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.6.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.7.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.8.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.9.SpellDamage       = 1
+# Rate.Creature.Tier.Vanilla.Level.10.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.11.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.12.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.13.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.14.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.15.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.16.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.17.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.18.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.19.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.20.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.21.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.22.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.23.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.24.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.25.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.26.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.27.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.28.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.29.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.30.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.31.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.32.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.33.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.34.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.35.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.36.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.37.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.38.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.39.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.40.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.41.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.42.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.43.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.44.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.45.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.46.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.47.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.48.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.49.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.50.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.51.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.52.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.53.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.54.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.55.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.56.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.57.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.58.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.59.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.60.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.61.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.62.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.63.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.64.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.65.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.66.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.67.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.68.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.69.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.70.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.71.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.72.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.73.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.74.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.75.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.76.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.77.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.78.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.79.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.80.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.81.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.82.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.83.SpellDamage      = 1
+# Rate.Creature.Tier.Vanilla.Level.84Plus.SpellDamage  = 1
+
+#
+# TBC tier - creature health
+# creature_template.exp = 1  (Outland, TBC dungeons and raids, Zul'Aman, Sunwell)
+#
+# Rate.Creature.Tier.TBC.Level.1.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.2.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.3.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.4.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.5.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.6.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.7.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.8.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.9.HP                    = 1
+# Rate.Creature.Tier.TBC.Level.10.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.11.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.12.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.13.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.14.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.15.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.16.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.17.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.18.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.19.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.20.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.21.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.22.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.23.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.24.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.25.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.26.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.27.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.28.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.29.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.30.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.31.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.32.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.33.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.34.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.35.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.36.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.37.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.38.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.39.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.40.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.41.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.42.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.43.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.44.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.45.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.46.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.47.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.48.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.49.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.50.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.51.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.52.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.53.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.54.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.55.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.56.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.57.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.58.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.59.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.60.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.61.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.62.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.63.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.64.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.65.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.66.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.67.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.68.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.69.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.70.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.71.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.72.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.73.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.74.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.75.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.76.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.77.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.78.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.79.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.80.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.81.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.82.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.83.HP                   = 1
+# Rate.Creature.Tier.TBC.Level.84Plus.HP               = 1
+
+#
+# TBC tier - creature melee damage
+# creature_template.exp = 1  (Outland, TBC dungeons and raids, Zul'Aman, Sunwell)
+#
+# Rate.Creature.Tier.TBC.Level.1.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.2.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.3.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.4.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.5.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.6.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.7.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.8.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.9.Damage                = 1
+# Rate.Creature.Tier.TBC.Level.10.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.11.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.12.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.13.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.14.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.15.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.16.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.17.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.18.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.19.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.20.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.21.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.22.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.23.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.24.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.25.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.26.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.27.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.28.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.29.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.30.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.31.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.32.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.33.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.34.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.35.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.36.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.37.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.38.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.39.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.40.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.41.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.42.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.43.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.44.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.45.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.46.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.47.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.48.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.49.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.50.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.51.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.52.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.53.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.54.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.55.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.56.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.57.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.58.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.59.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.60.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.61.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.62.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.63.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.64.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.65.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.66.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.67.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.68.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.69.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.70.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.71.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.72.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.73.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.74.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.75.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.76.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.77.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.78.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.79.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.80.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.81.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.82.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.83.Damage               = 1
+# Rate.Creature.Tier.TBC.Level.84Plus.Damage           = 1
+
+#
+# TBC tier - creature spell damage
+# creature_template.exp = 1  (Outland, TBC dungeons and raids, Zul'Aman, Sunwell)
+#
+# Rate.Creature.Tier.TBC.Level.1.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.2.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.3.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.4.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.5.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.6.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.7.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.8.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.9.SpellDamage           = 1
+# Rate.Creature.Tier.TBC.Level.10.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.11.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.12.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.13.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.14.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.15.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.16.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.17.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.18.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.19.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.20.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.21.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.22.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.23.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.24.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.25.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.26.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.27.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.28.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.29.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.30.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.31.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.32.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.33.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.34.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.35.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.36.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.37.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.38.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.39.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.40.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.41.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.42.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.43.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.44.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.45.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.46.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.47.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.48.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.49.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.50.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.51.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.52.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.53.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.54.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.55.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.56.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.57.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.58.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.59.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.60.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.61.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.62.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.63.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.64.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.65.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.66.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.67.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.68.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.69.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.70.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.71.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.72.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.73.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.74.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.75.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.76.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.77.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.78.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.79.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.80.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.81.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.82.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.83.SpellDamage          = 1
+# Rate.Creature.Tier.TBC.Level.84Plus.SpellDamage      = 1
+
+#
+# WotLK tier - creature health
+# creature_template.exp = 2  (Northrend, WotLK dungeons and raids)
+#
+# Rate.Creature.Tier.WotLK.Level.1.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.2.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.3.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.4.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.5.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.6.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.7.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.8.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.9.HP                  = 1
+# Rate.Creature.Tier.WotLK.Level.10.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.11.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.12.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.13.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.14.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.15.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.16.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.17.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.18.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.19.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.20.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.21.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.22.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.23.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.24.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.25.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.26.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.27.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.28.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.29.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.30.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.31.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.32.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.33.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.34.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.35.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.36.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.37.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.38.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.39.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.40.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.41.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.42.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.43.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.44.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.45.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.46.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.47.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.48.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.49.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.50.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.51.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.52.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.53.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.54.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.55.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.56.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.57.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.58.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.59.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.60.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.61.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.62.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.63.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.64.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.65.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.66.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.67.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.68.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.69.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.70.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.71.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.72.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.73.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.74.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.75.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.76.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.77.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.78.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.79.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.80.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.81.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.82.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.83.HP                 = 1
+# Rate.Creature.Tier.WotLK.Level.84Plus.HP             = 1
+
+#
+# WotLK tier - creature melee damage
+# creature_template.exp = 2  (Northrend, WotLK dungeons and raids)
+#
+# Rate.Creature.Tier.WotLK.Level.1.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.2.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.3.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.4.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.5.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.6.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.7.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.8.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.9.Damage              = 1
+# Rate.Creature.Tier.WotLK.Level.10.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.11.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.12.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.13.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.14.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.15.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.16.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.17.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.18.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.19.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.20.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.21.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.22.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.23.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.24.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.25.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.26.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.27.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.28.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.29.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.30.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.31.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.32.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.33.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.34.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.35.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.36.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.37.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.38.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.39.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.40.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.41.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.42.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.43.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.44.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.45.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.46.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.47.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.48.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.49.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.50.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.51.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.52.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.53.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.54.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.55.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.56.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.57.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.58.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.59.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.60.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.61.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.62.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.63.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.64.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.65.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.66.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.67.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.68.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.69.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.70.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.71.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.72.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.73.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.74.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.75.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.76.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.77.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.78.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.79.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.80.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.81.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.82.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.83.Damage             = 1
+# Rate.Creature.Tier.WotLK.Level.84Plus.Damage         = 1
+
+#
+# WotLK tier - creature spell damage
+# creature_template.exp = 2  (Northrend, WotLK dungeons and raids)
+#
+# Rate.Creature.Tier.WotLK.Level.1.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.2.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.3.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.4.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.5.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.6.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.7.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.8.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.9.SpellDamage         = 1
+# Rate.Creature.Tier.WotLK.Level.10.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.11.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.12.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.13.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.14.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.15.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.16.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.17.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.18.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.19.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.20.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.21.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.22.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.23.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.24.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.25.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.26.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.27.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.28.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.29.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.30.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.31.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.32.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.33.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.34.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.35.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.36.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.37.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.38.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.39.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.40.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.41.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.42.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.43.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.44.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.45.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.46.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.47.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.48.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.49.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.50.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.51.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.52.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.53.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.54.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.55.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.56.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.57.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.58.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.59.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.60.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.61.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.62.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.63.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.64.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.65.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.66.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.67.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.68.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.69.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.70.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.71.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.72.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.73.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.74.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.75.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.76.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.77.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.78.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.79.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.80.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.81.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.82.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.83.SpellDamage        = 1
+# Rate.Creature.Tier.WotLK.Level.84Plus.SpellDamage    = 1
+
+#
+#    Rate.Creature.Tier.ZoneOverrides
+#        Description: Comma separated "zoneId:tier" pairs that force a content tier for every
+#                     creature in a zone, overriding creature_template.exp.
+#                     Tier is 0 (Vanilla), 1 (TBC) or 2 (WotLK).
+#                     Useful for the Blood Elf and Draenei starting zones, whose creatures are
+#                     tagged exp = 1 but are levelling content in the 1-20 range:
+#                     3430 Eversong Woods, 3433 Ghostlands, 3524 Azuremyst Isle,
+#                     3525 Bloodmyst Isle, 3487 Silvermoon City, 3557 The Exodar.
+#        Example:     "3430:0,3433:0,3524:0,3525:0,3487:0,3557:0"
+#        Default:     "" - no overrides
+
+Rate.Creature.Tier.ZoneOverrides = ""
+
+#
+#    Rate.Creature.Tier.EntryOverrides
+#        Description: Comma separated "creatureEntry:tier" pairs for surgical fixes where a
+#                     single creature_template.exp value does not match its content.
+#                     Checked before ZoneOverrides. Tier is 0, 1 or 2 as above.
+#        Example:     "12345:0,23456:1"
+#        Default:     "" - no overrides
+
+Rate.Creature.Tier.EntryOverrides = ""
+
 # CUSTOM MODIFICATIONS END
 
 #

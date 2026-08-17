@@ -40,6 +40,7 @@
 #include "Config.h"
 #include "CreatureAIRegistry.h"
 #include "CreatureGroups.h"
+#include "CreatureScalingMgr.h"
 #include "CreatureTextMgr.h"
 #include "DBCStores.h"
 #include "DBUpdater.h"
@@ -192,6 +193,10 @@ void World::LoadConfigSettings(bool reload)
         sWorldSessionMgr->SetPlayerAmountLimit(sConfigMgr->GetOption<int32>("PlayerLimit", 1000));
 
     _worldConfig.Initialize(reload);
+
+    // CUSTOM MODIFICATIONS: content-tier creature difficulty scaling
+    sCreatureScalingMgr->LoadConfig();
+    // END CUSTOM MODIFICATIONS
 
     for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)
         playerBaseMoveSpeed[i] = baseMoveSpeed[i] * getRate(RATE_MOVESPEED_PLAYER);
