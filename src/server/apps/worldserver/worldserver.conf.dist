@@ -4073,6 +4073,82 @@ Rate.Creature.Level.80-90.HP = 1
 # Rate.Creature.Tier.WotLK.Level.84Plus.SpellDamage    = 1
 
 #
+#    Rate.Creature.Tier.<Vanilla|TBC|WotLK>.Rank.<Normal|Elite|RareElite|WorldBoss|Rare>.<HP|Damage|SpellDamage>
+#
+#        Description: Per-content-tier, per-rank multipliers. Level bands cannot separate a boss from
+#                     its trash because they share levels - Molten Core trash is level 61-62 elite and
+#                     its bosses are 62-63 - and the global Rate.Creature.Normal.* /
+#                     Rate.Creature.Elite.* keys apply to all three eras at once. These keys let each
+#                     rank be tuned per era.
+#
+#                     The rank comes from creature_template.rank. A creature with the rare unknown
+#                     rank 5 uses the Elite value, matching how the global rates behave.
+#
+#        Default:     1 - no adjustment. This axis MULTIPLIES with the global rank rate and with the
+#                     per-level keys above; it does not replace either. The effective multiplier is:
+#
+#                         Rate.Creature.<rank>.<stat>                  (global, all eras)
+#                       * Rate.Creature.Tier.<era>.Level.<n>.<stat>    (per era, per level)
+#                       * Rate.Creature.Tier.<era>.Rank.<rank>.<stat>  (per era, per rank)
+#
+#        Example:     making only Vanilla world bosses tougher, leaving Vanilla trash alone:
+#                         Rate.Creature.Tier.Vanilla.Rank.WorldBoss.HP = 2.0
+#
+#        Note:        As above, Damage and SpellDamage respond to `.reload config`; HP needs a respawn.
+#
+
+# Vanilla tier - per-rank multipliers
+Rate.Creature.Tier.Vanilla.Rank.Normal.HP            = 1
+Rate.Creature.Tier.Vanilla.Rank.Normal.Damage        = 1
+Rate.Creature.Tier.Vanilla.Rank.Normal.SpellDamage   = 1
+Rate.Creature.Tier.Vanilla.Rank.Elite.HP             = 1
+Rate.Creature.Tier.Vanilla.Rank.Elite.Damage         = 1
+Rate.Creature.Tier.Vanilla.Rank.Elite.SpellDamage    = 1
+Rate.Creature.Tier.Vanilla.Rank.RareElite.HP         = 1
+Rate.Creature.Tier.Vanilla.Rank.RareElite.Damage     = 1
+Rate.Creature.Tier.Vanilla.Rank.RareElite.SpellDamage = 1
+Rate.Creature.Tier.Vanilla.Rank.WorldBoss.HP         = 1
+Rate.Creature.Tier.Vanilla.Rank.WorldBoss.Damage     = 1
+Rate.Creature.Tier.Vanilla.Rank.WorldBoss.SpellDamage = 1
+Rate.Creature.Tier.Vanilla.Rank.Rare.HP              = 1
+Rate.Creature.Tier.Vanilla.Rank.Rare.Damage          = 1
+Rate.Creature.Tier.Vanilla.Rank.Rare.SpellDamage     = 1
+
+# TBC tier - per-rank multipliers
+Rate.Creature.Tier.TBC.Rank.Normal.HP                = 1
+Rate.Creature.Tier.TBC.Rank.Normal.Damage            = 1
+Rate.Creature.Tier.TBC.Rank.Normal.SpellDamage       = 1
+Rate.Creature.Tier.TBC.Rank.Elite.HP                 = 1
+Rate.Creature.Tier.TBC.Rank.Elite.Damage             = 1
+Rate.Creature.Tier.TBC.Rank.Elite.SpellDamage        = 1
+Rate.Creature.Tier.TBC.Rank.RareElite.HP             = 1
+Rate.Creature.Tier.TBC.Rank.RareElite.Damage         = 1
+Rate.Creature.Tier.TBC.Rank.RareElite.SpellDamage    = 1
+Rate.Creature.Tier.TBC.Rank.WorldBoss.HP             = 1
+Rate.Creature.Tier.TBC.Rank.WorldBoss.Damage         = 1
+Rate.Creature.Tier.TBC.Rank.WorldBoss.SpellDamage    = 1
+Rate.Creature.Tier.TBC.Rank.Rare.HP                  = 1
+Rate.Creature.Tier.TBC.Rank.Rare.Damage              = 1
+Rate.Creature.Tier.TBC.Rank.Rare.SpellDamage         = 1
+
+# WotLK tier - per-rank multipliers
+Rate.Creature.Tier.WotLK.Rank.Normal.HP              = 1
+Rate.Creature.Tier.WotLK.Rank.Normal.Damage          = 1
+Rate.Creature.Tier.WotLK.Rank.Normal.SpellDamage     = 1
+Rate.Creature.Tier.WotLK.Rank.Elite.HP               = 1
+Rate.Creature.Tier.WotLK.Rank.Elite.Damage           = 1
+Rate.Creature.Tier.WotLK.Rank.Elite.SpellDamage      = 1
+Rate.Creature.Tier.WotLK.Rank.RareElite.HP           = 1
+Rate.Creature.Tier.WotLK.Rank.RareElite.Damage       = 1
+Rate.Creature.Tier.WotLK.Rank.RareElite.SpellDamage  = 1
+Rate.Creature.Tier.WotLK.Rank.WorldBoss.HP           = 1
+Rate.Creature.Tier.WotLK.Rank.WorldBoss.Damage       = 1
+Rate.Creature.Tier.WotLK.Rank.WorldBoss.SpellDamage  = 1
+Rate.Creature.Tier.WotLK.Rank.Rare.HP                = 1
+Rate.Creature.Tier.WotLK.Rank.Rare.Damage            = 1
+Rate.Creature.Tier.WotLK.Rank.Rare.SpellDamage       = 1
+
+#
 #    Rate.Creature.Tier.ZoneOverrides
 #        Description: Comma separated "zoneId:tier" pairs that force a content tier for every
 #                     creature in a zone, overriding creature_template.exp.

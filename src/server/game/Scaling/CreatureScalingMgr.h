@@ -19,6 +19,7 @@
 #define AZEROTHCORE_CREATURESCALINGMGR_H
 
 #include "Define.h"
+#include "SharedDefines.h"
 #include <string>
 #include <unordered_map>
 
@@ -59,6 +60,9 @@ constexpr uint8 CREATURE_SCALING_MAX_LEVEL = 83;
 constexpr uint8 CREATURE_SCALING_OVERFLOW_SLOT = CREATURE_SCALING_MAX_LEVEL + 1;
 constexpr uint8 CREATURE_SCALING_LEVEL_SLOTS = CREATURE_SCALING_OVERFLOW_SLOT + 1;
 
+// Indexed by CreatureEliteType: NORMAL, ELITE, RAREELITE, WORLDBOSS, RARE.
+constexpr uint8 CREATURE_SCALING_RANK_SLOTS = 5;
+
 class AC_GAME_API CreatureScalingMgr
 {
 public:
@@ -77,6 +81,21 @@ public:
         return _rate[tier][level > CREATURE_SCALING_OVERFLOW_SLOT ? CREATURE_SCALING_OVERFLOW_SLOT : level][stat];
     }
 
+    // Per-era rank multiplier. Multiplies with GetRate() and with the global
+    // Rate.Creature.<rank>.* family, which both stay in effect.
+    [[nodiscard]] float GetRankRate(ContentTier tier, uint32 rank, CreatureScalingStat stat) const
+    {
+        if (tier >= CONTENT_TIER_MAX || stat >= CREATURE_SCALING_STAT_MAX)
+            return 1.0f;
+
+        // CREATURE_UNKNOWN, and any other out-of-range rank, uses the Elite slot. This matches the
+        // `default:` branch of Creature::_GetHealthMod() / _GetDamageMod() / GetSpellDamageMod().
+        if (rank >= CREATURE_SCALING_RANK_SLOTS)
+            rank = CREATURE_ELITE_ELITE;
+
+        return _rankRate[tier][rank][stat];
+    }
+
     // Zone resolution needs a terrain lookup, so callers skip it when unused.
     [[nodiscard]] bool HasZoneOverrides() const { return !_zoneOverrides.empty(); }
 
@@ -84,11 +103,15 @@ private:
     CreatureScalingMgr();
 
     void LoadRates();
+    void LoadRankRates();
     void LoadOverrides(std::string const& configKey, std::unordered_map<uint32, uint8>& target,
         char const* label);
 
     // [tier][level][stat]. Slot 0 covers level-0 creatures and stays at 1.0f.
     float _rate[CONTENT_TIER_MAX][CREATURE_SCALING_LEVEL_SLOTS][CREATURE_SCALING_STAT_MAX];
+
+    // [tier][rank][stat].
+    float _rankRate[CONTENT_TIER_MAX][CREATURE_SCALING_RANK_SLOTS][CREATURE_SCALING_STAT_MAX];
 
     std::unordered_map<uint32, uint8> _zoneOverrides;
     std::unordered_map<uint32, uint8> _entryOverrides;

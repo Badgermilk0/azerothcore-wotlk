@@ -1524,7 +1524,9 @@ void Creature::SelectLevel(bool changelevel)
 
     // health
     // CUSTOM MODIFICATIONS
-    float healthmod = _GetHealthMod(rank) * sCreatureScalingMgr->GetRate(GetContentTier(), level, CREATURE_SCALING_HP);
+    float healthmod = _GetHealthMod(rank)
+        * sCreatureScalingMgr->GetRate(GetContentTier(), level, CREATURE_SCALING_HP)
+        * sCreatureScalingMgr->GetRankRate(GetContentTier(), rank, CREATURE_SCALING_HP);
     // END CUSTOM MODIFICATIONS
 
     uint32 basehp = std::max<uint32>(1, stats->GenerateHealth(cInfo));
@@ -1633,7 +1635,9 @@ float Creature::GetSpellDamageMod(int32 Rank)
     }
 
     // CUSTOM MODIFICATIONS
-    return rankMod * sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_SPELL_DAMAGE);
+    return rankMod
+        * sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_SPELL_DAMAGE)
+        * sCreatureScalingMgr->GetRankRate(GetContentTier(), uint32(Rank), CREATURE_SCALING_SPELL_DAMAGE);
     // END CUSTOM MODIFICATIONS
 }
 
@@ -1784,7 +1788,8 @@ bool Creature::LoadCreatureFromDB(ObjectGuid::LowType spawnId, Map* map, bool ad
         {
             //CUSTOM MODIFICATIONS
             curhealth = uint32(curhealth * _GetHealthMod(GetCreatureTemplate()->rank)
-                * sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_HP));
+                * sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_HP)
+                * sCreatureScalingMgr->GetRankRate(GetContentTier(), GetCreatureTemplate()->rank, CREATURE_SCALING_HP));
             //END CUSTOM MODIFICATIONS
             if (curhealth < 1)
                 curhealth = 1;

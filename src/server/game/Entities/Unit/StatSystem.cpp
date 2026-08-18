@@ -1172,7 +1172,8 @@ void Creature::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, 
     // inherited by Pet/Guardian/Totem, which must keep their stock damage.
     float levelDmgMultiplier = 1.0f;
     if (!IsPet() && !IsGuardian() && !IsControlledByPlayer())
-        levelDmgMultiplier = sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_DAMAGE);
+        levelDmgMultiplier = sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_DAMAGE)
+            * sCreatureScalingMgr->GetRankRate(GetContentTier(), GetCreatureTemplate()->rank, CREATURE_SCALING_DAMAGE);
 
     minDamage = ((weaponMinDamage + baseValue) * dmgMultiplier * levelDmgMultiplier * basePct + totalValue) * totalPct;
     maxDamage = ((weaponMaxDamage + baseValue) * dmgMultiplier * levelDmgMultiplier * basePct + totalValue) * totalPct;

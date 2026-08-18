@@ -28,6 +28,11 @@ namespace
     constexpr char const* TierNames[CONTENT_TIER_MAX] = { "Vanilla", "TBC", "WotLK" };
     constexpr char const* StatNames[CREATURE_SCALING_STAT_MAX] = { "HP", "Damage", "SpellDamage" };
 
+    // Indexed by CreatureEliteType. Deliberately consistent casing, unlike the upstream
+    // Rate.Creature.Elite.RAREELITE / .WORLDBOSS / .RARE keys these sit alongside.
+    constexpr char const* RankNames[CREATURE_SCALING_RANK_SLOTS] =
+        { "Normal", "Elite", "RareElite", "WorldBoss", "Rare" };
+
     // The level bands the pre-tier configuration used. They remain supported as
     // the default for every tier, so an untouched worldserver.conf keeps its
     // existing tuning after the upgrade.
@@ -61,9 +66,15 @@ namespace
 CreatureScalingMgr::CreatureScalingMgr()
 {
     for (uint8 tier = 0; tier < CONTENT_TIER_MAX; ++tier)
+    {
         for (uint8 slot = 0; slot < CREATURE_SCALING_LEVEL_SLOTS; ++slot)
             for (uint8 stat = 0; stat < CREATURE_SCALING_STAT_MAX; ++stat)
                 _rate[tier][slot][stat] = 1.0f;
+
+        for (uint8 rank = 0; rank < CREATURE_SCALING_RANK_SLOTS; ++rank)
+            for (uint8 stat = 0; stat < CREATURE_SCALING_STAT_MAX; ++stat)
+                _rankRate[tier][rank][stat] = 1.0f;
+    }
 }
 
 CreatureScalingMgr* CreatureScalingMgr::instance()
@@ -75,6 +86,7 @@ CreatureScalingMgr* CreatureScalingMgr::instance()
 void CreatureScalingMgr::LoadConfig()
 {
     LoadRates();
+    LoadRankRates();
     LoadOverrides("Rate.Creature.Tier.ZoneOverrides", _zoneOverrides, "zone");
     LoadOverrides("Rate.Creature.Tier.EntryOverrides", _entryOverrides, "creature entry");
 }
@@ -106,6 +118,22 @@ void CreatureScalingMgr::LoadRates()
             }
         }
     }
+}
+
+void CreatureScalingMgr::LoadRankRates()
+{
+    for (uint8 tier = 0; tier < CONTENT_TIER_MAX; ++tier)
+        for (uint8 rank = 0; rank < CREATURE_SCALING_RANK_SLOTS; ++rank)
+            for (uint8 stat = 0; stat < CREATURE_SCALING_STAT_MAX; ++stat)
+            {
+                // Defaults to 1.0f: this axis multiplies with the global Rate.Creature.<rank>.*
+                // rates rather than replacing them, so an unset key is a no-op.
+                // showLogs is off for the same reason as LoadRates() - these keys are optional.
+                std::string const key = Acore::StringFormat("Rate.Creature.Tier.{}.Rank.{}.{}",
+                    TierNames[tier], RankNames[rank], StatNames[stat]);
+
+                _rankRate[tier][rank][stat] = sConfigMgr->GetOption<float>(key, 1.0f, false);
+            }
 }
 
 void CreatureScalingMgr::LoadOverrides(std::string const& configKey, std::unordered_map<uint32, uint8>& target,
