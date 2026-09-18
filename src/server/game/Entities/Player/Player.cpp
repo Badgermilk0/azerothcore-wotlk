@@ -3411,6 +3411,9 @@ bool Player::IsNeedCastPassiveSpellAtLearn(SpellInfo const* spellInfo) const
 
 void Player::learnSpell(uint32 spellId, bool temporary /*= false*/, bool learnFromSkill /*= false*/)
 {
+    if (!sScriptMgr->OnPlayerCanLearnSpell(this, spellId))
+        return;
+
     // Xinef: don't allow to learn active spell once more
     if (HasActiveSpell(spellId))
     {
@@ -13157,13 +13160,11 @@ void Player::SetClientControl(Unit* target, bool allowMove, bool packetOnly /*= 
         return;
     }
 
-    // still affected by some aura that shouldn't allow control, only allow on last such aura to be removed
-    if (target->HasUnitState(UNIT_STATE_FLEEING | UNIT_STATE_CONFUSED))
-        allowMove = false;
-
+    // A fleeing/confused target can't be controlled by the client yet, but the mover
+    // must still switch so control is restored once the crowd control ends.
     WorldPacket data(SMSG_CLIENT_CONTROL_UPDATE, target->GetPackGUID().size() + 1);
     data << target->GetPackGUID();
-    data << uint8(allowMove ? 1 : 0);
+    data << uint8((allowMove && !target->HasUnitState(UNIT_STATE_FLEEING | UNIT_STATE_CONFUSED)) ? 1 : 0);
     SendDirectMessage(&data);
 
     // We want to set the packet only
