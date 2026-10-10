@@ -287,6 +287,9 @@ int main(int argc, char** argv)
 
     std::shared_ptr<void> dbHandle(nullptr, [](void*) { StopDB(); });
 
+    // Declared right after dbHandle so it runs after every other shutdown step; a crash before this leaves EndTime NULL
+    std::shared_ptr<void> sessionEndHandle(nullptr, [](void*) { sWorld->SaveSessionEnd(true); });
+
     // set server offline (not connectable)
     LoginDatabase.DirectExecute("UPDATE realmlist SET flag = (flag & ~{}) | {} WHERE id = '{}'", REALM_FLAG_OFFLINE, REALM_FLAG_VERSION_MISMATCH, realm.Id.Realm);
 
@@ -412,6 +415,10 @@ int main(int argc, char** argv)
     // Shutdown starts here
     threadPool.reset();
 
+    // Record the shutdown details now so a crash while saving players still reports them.
+    // After threadPool.reset() no signal handler can run StopNow and change the exit code.
+    sWorld->SaveSessionEnd(false);
+
     sToCloud9Sidecar->Deinit();
 
     sLog->SetSynchronous();
@@ -446,10 +453,8 @@ bool StartDB()
     if (!loader.Load())
         return false;
 
-    if (!sScriptMgr->OnDatabasesLoading())
-    {
+    if (!sScriptMgr->OnModuleDatabasesLoading())
         return false;
-    }
 
     ///- Get the realm Id from the configuration file
     realm.Id.Realm = sConfigMgr->GetOption<uint32>("RealmID", 1);
@@ -499,7 +504,7 @@ void StopDB()
     WorldDatabase.Close();
     LoginDatabase.Close();
 
-    sScriptMgr->OnDatabasesClosing();
+    sScriptMgr->OnModuleDatabasesClosing();
 
     MySQL::Library_End();
 }
