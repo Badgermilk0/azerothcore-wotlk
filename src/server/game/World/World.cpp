@@ -39,8 +39,8 @@
 #include "ConditionMgr.h"
 #include "Config.h"
 #include "CreatureAIRegistry.h"
+#include "CreatureEraHp.h"
 #include "CreatureGroups.h"
-#include "CreatureScalingMgr.h"
 #include "CreatureTextMgr.h"
 #include "DBCStores.h"
 #include "DBUpdater.h"
@@ -195,8 +195,8 @@ void World::LoadConfigSettings(bool reload)
 
     _worldConfig.Initialize(reload);
 
-    // CUSTOM MODIFICATIONS: content-tier creature difficulty scaling
-    sCreatureScalingMgr->LoadConfig();
+    // CUSTOM MODIFICATIONS: era creature health scaling
+    sCreatureEraHp->LoadConfig();
     // END CUSTOM MODIFICATIONS
 
     for (uint8 i = 0; i < MAX_MOVE_TYPE; ++i)

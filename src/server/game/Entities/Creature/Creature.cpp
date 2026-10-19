@@ -21,6 +21,7 @@
 #include "Common.h"
 #include "CreatureAI.h"
 #include "CreatureAISelector.h"
+#include "CreatureEraHp.h"
 #include "CreatureGroups.h"
 #include "MoveSpline.h"
 #include "DatabaseEnv.h"
@@ -269,8 +270,7 @@ Creature::Creature(): Unit(), MovableMapObject(), m_groupLootTimer(0), lootingGr
     m_spawnId(0), m_equipmentId(0), m_originalEquipmentId(0), m_alreadyCallForHelp(false), m_AlreadyCallAssistance(false),
     m_AlreadySearchedAssistance(false), m_regenHealth(true), m_regenPower(true), m_AI_locked(false), m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL), m_originalEntry(0), _gossipMenuId(0), m_moveInLineOfSightDisabled(false), m_moveInLineOfSightStrictlyDisabled(false),
     m_homePosition(), m_transportHomePosition(), m_creatureInfo(nullptr), m_creatureData(nullptr), m_detectionDistance(20.0f),_sparringPct(0.0f), m_waypointID(0), m_path_id(0), m_formation(nullptr), m_lastLeashExtensionTime(nullptr),
-    _isMissingSwimmingFlagOutOfCombat(false), m_assistanceTimer(0), _playerDamageReq(0), _damagedByPlayer(false), _highestPlayerAttackerLevel(0), _isCombatMovementAllowed(true),
-    _contentTier(CONTENT_TIER_WOTLK)
+    _isMissingSwimmingFlagOutOfCombat(false), m_assistanceTimer(0), _playerDamageReq(0), _damagedByPlayer(false), _highestPlayerAttackerLevel(0), _isCombatMovementAllowed(true)
 {
     m_regenTimer = CREATURE_REGEN_INTERVAL;
     m_valuesCount = UNIT_END;
@@ -624,17 +624,6 @@ bool Creature::UpdateEntry(uint32 Entry, CreatureData const* data, bool changele
     SetAttackTime(BASE_ATTACK,   cInfo->BaseAttackTime);
     SetAttackTime(OFF_ATTACK,    cInfo->BaseAttackTime);
     SetAttackTime(RANGED_ATTACK, cInfo->RangeAttackTime);
-
-    // CUSTOM MODIFICATIONS
-    // Resolve the difficulty scaling tier before SelectLevel(), which needs it for health.
-    // Cached for the lifetime of the spawn: the damage rates are read on every swing and
-    // every cast, and a creature's content tier does not change while it is alive.
-    // The zone lookup is a terrain query, so it is skipped unless zone overrides exist.
-    uint32 scalingZoneId = sCreatureScalingMgr->HasZoneOverrides() && GetMap()
-        ? GetMap()->GetZoneId(GetPhaseMask(), GetPositionX(), GetPositionY(), GetPositionZ())
-        : 0;
-    _contentTier = sCreatureScalingMgr->ResolveTier(cInfo, scalingZoneId);
-    // END CUSTOM MODIFICATIONS
 
     uint32 previousHealth = GetHealth();
     uint32 previousMaxHealth = GetMaxHealth();
@@ -1540,10 +1529,8 @@ void Creature::SelectLevel(bool changelevel)
     CreatureBaseStats const* stats = sObjectMgr->GetCreatureBaseStats(level, cInfo->unit_class);
 
     // health
-    // CUSTOM MODIFICATIONS
-    float healthmod = _GetHealthMod(rank)
-        * sCreatureScalingMgr->GetRate(GetContentTier(), level, CREATURE_SCALING_HP)
-        * sCreatureScalingMgr->GetRankRate(GetContentTier(), rank, CREATURE_SCALING_HP);
+    // CUSTOM MODIFICATIONS: era/content/rank/level health scaling
+    float healthmod = _GetHealthMod(rank) * sCreatureEraHp->GetRate(this, level);
     // END CUSTOM MODIFICATIONS
 
     uint32 basehp = std::max<uint32>(1, stats->GenerateHealth(cInfo));
@@ -1628,34 +1615,21 @@ float Creature::_GetDamageMod(int32 Rank)
 
 float Creature::GetSpellDamageMod(int32 Rank)
 {
-    float rankMod;
     switch (Rank)                                           // define rates for each elite rank
     {
         case CREATURE_ELITE_NORMAL:
-            rankMod = sWorld->getRate(RATE_CREATURE_NORMAL_SPELLDAMAGE);
-            break;
+            return sWorld->getRate(RATE_CREATURE_NORMAL_SPELLDAMAGE);
         case CREATURE_ELITE_ELITE:
-            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
-            break;
+            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
         case CREATURE_ELITE_RAREELITE:
-            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_SPELLDAMAGE);
-            break;
+            return sWorld->getRate(RATE_CREATURE_ELITE_RAREELITE_SPELLDAMAGE);
         case CREATURE_ELITE_WORLDBOSS:
-            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_SPELLDAMAGE);
-            break;
+            return sWorld->getRate(RATE_CREATURE_ELITE_WORLDBOSS_SPELLDAMAGE);
         case CREATURE_ELITE_RARE:
-            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_RARE_SPELLDAMAGE);
-            break;
+            return sWorld->getRate(RATE_CREATURE_ELITE_RARE_SPELLDAMAGE);
         default:
-            rankMod = sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
-            break;
+            return sWorld->getRate(RATE_CREATURE_ELITE_ELITE_SPELLDAMAGE);
     }
-
-    // CUSTOM MODIFICATIONS
-    return rankMod
-        * sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_SPELL_DAMAGE)
-        * sCreatureScalingMgr->GetRankRate(GetContentTier(), uint32(Rank), CREATURE_SCALING_SPELL_DAMAGE);
-    // END CUSTOM MODIFICATIONS
 }
 
 bool Creature::CreateFromProto(ObjectGuid::LowType guidlow, uint32 Entry, uint32 vehId, CreatureData const* data)
@@ -1803,11 +1777,9 @@ bool Creature::LoadCreatureFromDB(ObjectGuid::LowType spawnId, Map* map, bool ad
         curhealth = data->curhealth;
         if (curhealth)
         {
-            //CUSTOM MODIFICATIONS
-            curhealth = uint32(curhealth * _GetHealthMod(GetCreatureTemplate()->rank)
-                * sCreatureScalingMgr->GetRate(GetContentTier(), GetLevel(), CREATURE_SCALING_HP)
-                * sCreatureScalingMgr->GetRankRate(GetContentTier(), GetCreatureTemplate()->rank, CREATURE_SCALING_HP));
-            //END CUSTOM MODIFICATIONS
+            // CUSTOM MODIFICATIONS: same era health rate as SelectLevel()
+            curhealth = uint32(curhealth * _GetHealthMod(GetCreatureTemplate()->rank) * sCreatureEraHp->GetRate(this, GetLevel()));
+            // END CUSTOM MODIFICATIONS
             if (curhealth < 1)
                 curhealth = 1;
         }

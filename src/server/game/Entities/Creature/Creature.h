@@ -22,7 +22,6 @@
 #include "CharmInfo.h"
 #include "Common.h"
 #include "CreatureData.h"
-#include "CreatureScalingMgr.h"
 #include "LootMgr.h"
 #include "Unit.h"
 #include <list>
@@ -200,10 +199,6 @@ public:
     void SetCurrentEquipmentId(uint8 id) { m_equipmentId = id; }
 
     float GetSpellDamageMod(int32 Rank);
-
-    // CUSTOM: content tier this creature's difficulty scaling is keyed on.
-    // Cached in UpdateEntry() because the damage rates are read on every swing.
-    [[nodiscard]] ContentTier GetContentTier() const { return ContentTier(_contentTier); }
 
     [[nodiscard]] VendorItemData const* GetVendorItems() const;
     uint32 GetVendorItemCurrentCount(VendorItem const* vItem);
@@ -569,7 +564,6 @@ private:
     bool _damagedByPlayer;
     uint8 _highestPlayerAttackerLevel;
     bool _isCombatMovementAllowed;
-    uint8 _contentTier;
 };
 
 class AssistDelayEvent : public BasicEvent
